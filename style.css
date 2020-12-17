@@ -1,0 +1,52 @@
+body
+{
+    background-color: #1d2d50;
+    color: white;
+    text-align: center;
+    font-family: tahoma;
+}
+.container
+{
+    background-color: #133b5c;
+    width: 80%;
+    margin: auto;
+    padding: 10px;
+}
+.tab
+{
+	display: inline-block;
+	width: 29%;
+	padding: 10px;
+	margin: 10px;
+}
+.taskBox
+{
+	margin: 20px;
+}
+.task
+{
+	text-align: left;
+	width: 81%;
+}
+.buttonContainer
+{
+	display: inline-block;
+}
+.subTaskBox
+{
+	display: inline-block;
+	width: 93%;
+}
+.task,.button,.arrow
+{
+	display: inline-block;
+	padding: 10px;
+	margin: 10px;
+}
+
+/*Border*/
+.container,.tab,.taskBox,.task,.button
+{
+	border: 1px solid black;
+	border-radius: 10px;
+}
