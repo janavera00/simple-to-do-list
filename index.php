@@ -1,6 +1,11 @@
 <?php
 	session_start();
 
+	if(!$_GET)
+	{
+		$_SESSION['error'] = 0;
+	}
+
 	include_once 'db.php';
 ?>
 <!DOCTYPE html>
@@ -31,30 +36,13 @@
 
 			<!-- textbox for task input -->
 			<div class="taskBox">
-				<form method="post">
-					<input type="textbox" name="task" class="task" placeholder="What will you do today?">
+				<form method="post" action="add.php">
+					<input type="textbox" name="task" class="task" style="width: 91%;" placeholder="What will you do today?">
 					<input type="submit" name="enter" value="Enter" class="button">
 				</form>
-				<?php
-					if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-						$repeat = "";
-
-						$query = "SELECT * FROM task WHERE name='".$_POST["task"]."'";
-						$result = $conn->query($query);
-						$rows = $result->fetch_assoc();
-						if(!$rows)
-						{
-							$query = "INSERT INTO task(name, date) VALUES('".$_POST["task"]."', '".date("Y-m-d")."');";
-							$result = $conn->query($query);
-
-							header("Location:index.php");	
-						}
-						else
-						{
-							echo "Task already Exist";
-						}
-					} 
-				?>
+				<div <?php echo $_SESSION['error'] == -1?"id":"class" ?>="error" >
+					Task already in the list!!!
+				</div>
 			</div>
 
 			<?php
@@ -70,55 +58,74 @@
 				{
 					// display task box
 					if($rows['status'] == 0)
-					echo "<div class='taskBox'>
-							<div class='task'>
-								".$rows['name']."
-							</div>
+					{ ?>
+						<div class='taskBox'>
+							<a onclick="myFunction(<?php echo $rows['taskno']; ?>)" style="color: white;" id="<?php echo $rows['taskno']; ?>">
+								<div class='task'>
+									<?php echo $rows['name'] ?>
+								</div>
+							</a>
 							<div class='buttonContainer'>
-								<div class='button'>
-									/
-								</div>
-								<div class='button'>
-									E
-								</div>
-								<div class='button'>
-									X
-								</div>
-							</div>";
+								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
+								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" >Edit</a>
+								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
+							</div>
 
-					// query to fetch subtask
-					$subQuery = "SELECT * FROM subtask WHERE mainTask='".$rows['taskno']."';";
-					$subResult = $conn->query($subQuery);
+							<hr>
+							<div class="subTaskBox">
+								<form method="post" action="add.php?main=<?php echo $rows['taskno']; ?>">
+									<input type="textbox" name="task" class="task" style="width: 90%;" placeholder="Any Specifics?">
+									<input type="submit" name="enter" value="Enter" class="button">
 
-					while ($subRows = $subResult->fetch_assoc()) 
-					{
-						if($subRows['status'] == 0)
-						{
-							echo "<br>
-								<div class='arrow'>
-									L>
+									<div <?php echo $_SESSION['error'] == $rows['taskno']?"id":"class" ?>="error" >
+										Task already in the list!!!
+									</div>
+								</form>
+								<!-- <div class='task' style="width: 79%;">
+									<?php echo $rows['name'] ?>
 								</div>
-								<div class='subTaskBox'>
-									<div class='task'>
-										".$subRows['name']."
-									</div>
-									<div class='buttonContainer'>
-										<div class='button'>
-											/
+								<div class='buttonContainer'>
+									<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
+									<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" >Edit</a>
+									<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
+								</div> -->
+							</div>
+
+							<?php 
+								$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."'");
+
+								while ($subRows = $subResult->fetch_assoc()) {
+									?>
+										<hr>
+										<div class="subTaskBox">
+											<div class='task' style="width: 79%;">
+												<?php echo $subRows['name'] ?>
+											</div>
+											<div class='buttonContainer'>
+												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
+												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" >Edit</a>
+												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
+											</div>
 										</div>
-										<div class='button'>
-											E
-										</div>
-										<div class='button'>
-											X
-										</div>
-									</div>
-								</div>";
-						}
-					}
-					echo "</div>";
-				}
-			?>
-		</div>
+									<?php
+								}
+							?>
+							<!--  -->
+						</div>
+						<?php
+							}}
+						?>								
+		<script>
+			function myFunction(elemId)
+			{
+				// var elemId = "";
+				// alert(elemId);
+				document.getElementById(elemId).style.display = "none";
+			}
+			function openSubtask()
+			{
+
+			}
+		</script>
 	</body>
 </html>

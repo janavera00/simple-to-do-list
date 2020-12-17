@@ -31,7 +31,7 @@ input
 .task
 {
 	text-align: left;
-	width: 81%;
+	width: 80%;
 }
 .buttonContainer
 {
@@ -39,8 +39,14 @@ input
 }
 .subTaskBox
 {
-	display: inline-block;
-	width: 93%;
+	margin-left: auto;
+	width: 95%;
+}
+.button, a
+{
+	color: white;
+	text-decoration: none;
+	cursor: pointer;
 }
 .task,.button,.arrow
 {
@@ -50,8 +56,21 @@ input
 }
 
 /*Border*/
-.container,.tab,.taskBox,.task,.button
+.container,.tab,.taskBox,.task,.button,#error
 {
 	border: 1px solid black;
 	border-radius: 10px;
+}
+
+#error
+{
+	background-color: red;
+	color: white;
+	margin: 10px auto;
+	padding: 10px;
+	width: 40%;
+}
+.error
+{
+	display: none;
 }
