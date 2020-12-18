@@ -5,7 +5,7 @@
 		<title>To Do List</title>
 	</head>
 	<body>
-		<h1 style="font-size: 50px;">To Do List</h1>
+		<h1 style="font-size: 50px; margin: 50px;">To Do List</h1>
 		
 		<div class="container">
 			<div class="tabContainer">
@@ -29,6 +29,9 @@
 				</div>
 			</div>
 
+			<?php
+
+			?>
 			<div class="taskBox">
 				<div class="task">
 					This is a task
@@ -44,7 +47,7 @@
 						X
 					</div>
 				</div>
-
+				<br>
 				<div class="arrow">
 					L>
 				</div>
