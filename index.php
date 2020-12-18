@@ -6,12 +6,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="style.css">		
+		<link rel="stylesheet" type="text/css" href="design.css">
 		<title>To Do List</title>
 	</head>
 	<body>
 		<!-- Title -->
-		<h1 style="font-size: 50px; margin: 50px;">To Do List</h1>
+		<h1 style="font-size: 70px; margin: 50px;">To Do List</h1>
 		
 		<!-- Main Container -->
 		<div class="container">
@@ -28,14 +28,33 @@
 				</div>
 			</div>
 
+
 			<!-- textbox for task input -->
 			<div class="taskBox">
-				<div class="task" style="width: 88%;">
-					This is a textbox
-				</div>
-				<div class="button">
-					Enter
-				</div>
+				<form method="post">
+					<input type="textbox" name="task" class="task" placeholder="What will you do today?">
+					<input type="submit" name="enter" value="Enter" class="button">
+				</form>
+				<?php
+					if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+						$repeat = "";
+
+						$query = "SELECT * FROM task WHERE name='".$_POST["task"]."'";
+						$result = $conn->query($query);
+						$rows = $result->fetch_assoc();
+						if(!$rows)
+						{
+							$query = "INSERT INTO task(name, date) VALUES('".$_POST["task"]."', '".date("Y-m-d")."');";
+							$result = $conn->query($query);
+
+							header("Location:index.php");	
+						}
+						else
+						{
+							echo "Task already Exist";
+						}
+					} 
+				?>
 			</div>
 
 			<?php
@@ -46,10 +65,11 @@
 				$query = "SELECT * FROM task WHERE date='".$today."';";
 				$result = $conn->query($query);
 
-
+				// display all the task ang subtask
 				while ($rows = $result->fetch_assoc()) 
 				{
 					// display task box
+					if($rows['status'] == 0)
 					echo "<div class='taskBox'>
 							<div class='task'>
 								".$rows['name']."
@@ -72,26 +92,29 @@
 
 					while ($subRows = $subResult->fetch_assoc()) 
 					{
-						echo "<br>
-							<div class='arrow'>
-								L>
-							</div>
-							<div class='subTaskBox'>
-								<div class='task'>
-									".$subRows['name']."
+						if($subRows['status'] == 0)
+						{
+							echo "<br>
+								<div class='arrow'>
+									L>
 								</div>
-								<div class='buttonContainer'>
-									<div class='button'>
-										/
+								<div class='subTaskBox'>
+									<div class='task'>
+										".$subRows['name']."
 									</div>
-									<div class='button'>
-										E
+									<div class='buttonContainer'>
+										<div class='button'>
+											/
+										</div>
+										<div class='button'>
+											E
+										</div>
+										<div class='button'>
+											X
+										</div>
 									</div>
-									<div class='button'>
-										X
-									</div>
-								</div>
-							</div>";
+								</div>";
+						}
 					}
 					echo "</div>";
 				}

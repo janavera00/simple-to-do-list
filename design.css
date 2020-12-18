@@ -5,6 +5,11 @@ body
     text-align: center;
     font-family: tahoma;
 }
+input
+{
+	background-color: #133b5c;
+	color: white;
+}
 .container
 {
     background-color: #133b5c;
