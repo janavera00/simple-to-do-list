@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2020 at 02:28 AM
+-- Generation Time: Dec 21, 2020 at 07:18 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -31,16 +31,17 @@ CREATE TABLE `subtask` (
   `subtaskno` int(11) NOT NULL,
   `mainTask` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `subtask`
 --
 
-INSERT INTO `subtask` (`subtaskno`, `mainTask`, `name`, `date`) VALUES
-(1, 1, 'Programming', '2020-12-17'),
-(2, 1, 'Database', '2020-12-17');
+INSERT INTO `subtask` (`subtaskno`, `mainTask`, `name`, `date`, `status`) VALUES
+(1, 1, 'Programming', '2020-12-17', 0),
+(2, 1, 'Database', '2020-12-17', 0);
 
 -- --------------------------------------------------------
 
@@ -51,16 +52,17 @@ INSERT INTO `subtask` (`subtaskno`, `mainTask`, `name`, `date`) VALUES
 CREATE TABLE `task` (
   `taskno` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `task`
 --
 
-INSERT INTO `task` (`taskno`, `name`, `date`) VALUES
-(1, 'Study', '2020-12-17'),
-(2, 'Shower', '2020-12-17');
+INSERT INTO `task` (`taskno`, `name`, `date`, `status`) VALUES
+(1, 'Study', '2020-12-17', 0),
+(2, 'Shower', '2020-12-17', 0);
 
 --
 -- Indexes for dumped tables
