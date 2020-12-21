@@ -16,7 +16,7 @@
 				// $result = $conn->query($query);
 				echo $_GET['main']. " - " .$_POST["task"];
 				$_SESSION['error'] = 0;
-				header("Location:index.php");	
+				header("Location:index.php");	 
 			}
 			else
 			{

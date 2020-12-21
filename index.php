@@ -120,7 +120,7 @@
 			{
 				// var elemId = "";
 				// alert(elemId);
-				document.getElementById(elemId).style.display = "none";
+				document.getElementById(elemId).style.display = "none"; 
 			}
 			function openSubtask()
 			{
