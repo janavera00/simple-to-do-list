@@ -58,9 +58,10 @@
 				{
 					// display task box
 					if($rows['status'] == 0)
+						$key = $rows['taskno'];
 					{ ?>
 						<div class='taskBox'>
-							<a onclick="myFunction(<?php echo $rows['taskno']; ?>)" style="color: white;" id="<?php echo $rows['taskno']; ?>">
+							<a onclick="myFunction(<?php echo $rows['taskno']; ?>)" style="color: white;">
 								<div class='task'>
 									<?php echo $rows['name'] ?>
 								</div>
@@ -71,25 +72,19 @@
 								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
 							</div>
 
-							<hr style="width: 95%;">
-							<div class="subTaskBox">
-								<form method="post" action="add.php?main=<?php echo $rows['taskno']; ?>">
-									<input type="textbox" name="task" class="task" style="width: 90%;" placeholder="Any Specifics?" required>
-									<input type="submit" name="enter" value="Enter" class="button">
+							<div id="<?php echo $rows['taskno']; ?>" style="display: none;">
+								<hr style="width: 95%;">
+								<div class="subTaskBox">
+									<form method="post" action="add.php?main=<?php echo $rows['taskno']; ?>">
+										<input type="textbox" name="task" class="task" style="width: 90%;" placeholder="Any Specifics?" required>
+										<input type="submit" name="enter" value="Enter" class="button">
 
-									<div <?php echo $_SESSION['error'] == $rows['taskno']?"id":"class" ?>="error" >
-										Task already in the list!!!
-									</div>
-								</form>
-								<!-- <div class='task' style="width: 79%;">
-									<?php echo $rows['name'] ?>
+										<div <?php echo $_SESSION['error'] == $rows['taskno']?"id":"class" ?>="error" >
+											Task already in the list!!!
+										</div>
+									</form>
 								</div>
-								<div class='buttonContainer'>
-									<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
-									<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" >Edit</a>
-									<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
-								</div> -->
-							</div>
+							
 
 							<?php 
 								$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."'");
@@ -110,6 +105,7 @@
 									<?php
 								}
 							?>
+							</div>
 							<!--  -->
 						</div>
 						<?php
@@ -118,9 +114,16 @@
 		<script>
 			function myFunction(elemId)
 			{
-				// var elemId = "";
-				// alert(elemId);
-				document.getElementById(elemId).style.display = "none"; 
+				var disp = document.getElementById(elemId).style.display; 
+				// alert(disp);
+				if(disp == "none")
+				{
+					document.getElementById(elemId).style.display = "block";
+				}
+				else
+				{
+					document.getElementById(elemId).style.display = "none";
+				}
 			}
 			function openSubtask()
 			{
