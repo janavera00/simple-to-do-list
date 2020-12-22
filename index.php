@@ -37,7 +37,7 @@
 			<!-- textbox for task input -->
 			<div class="taskBox">
 				<form method="post" action="add.php">
-					<input type="textbox" name="task" class="task" style="width: 91%;" placeholder="What will you do today?">
+					<input type="textbox" name="task" class="task" style="width: 91%;" placeholder="What will you do today?" required>
 					<input type="submit" name="enter" value="Enter" class="button">
 				</form>
 				<div <?php echo $_SESSION['error'] == -1?"id":"class" ?>="error" >
@@ -71,10 +71,10 @@
 								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
 							</div>
 
-							<hr>
+							<hr style="width: 95%;">
 							<div class="subTaskBox">
 								<form method="post" action="add.php?main=<?php echo $rows['taskno']; ?>">
-									<input type="textbox" name="task" class="task" style="width: 90%;" placeholder="Any Specifics?">
+									<input type="textbox" name="task" class="task" style="width: 90%;" placeholder="Any Specifics?" required>
 									<input type="submit" name="enter" value="Enter" class="button">
 
 									<div <?php echo $_SESSION['error'] == $rows['taskno']?"id":"class" ?>="error" >
@@ -96,7 +96,7 @@
 
 								while ($subRows = $subResult->fetch_assoc()) {
 									?>
-										<hr>
+										<hr style="width: 95%;">
 										<div class="subTaskBox">
 											<div class='task' style="width: 79%;">
 												<?php echo $subRows['name'] ?>

@@ -12,9 +12,9 @@
 			$rows = $result->fetch_assoc();
 			if(!$rows)
 			{
-				// $query = "INSERT INTO task(name, date) VALUES('".$_POST["task"]."', '".date("Y-m-d")."');";
-				// $result = $conn->query($query);
-				echo $_GET['main']. " - " .$_POST["task"];
+				$query = "INSERT INTO subtask(name, mainTask, date, status) VALUES('".$_POST["task"]."', ".$_GET['main'].", '".date("Y-m-d")."', 0);";
+				$result = $conn->query($query);
+				// echo $_GET['main']. " - " .$_POST["task"];
 				$_SESSION['error'] = 0;
 				header("Location:index.php");	 
 			}
@@ -31,8 +31,9 @@
 			$rows = $result->fetch_assoc();
 			if(!$rows)
 			{
-				// $query = "INSERT INTO task(name, date) VALUES('".$_POST["task"]."', '".date("Y-m-d")."');";
-				// $result = $conn->query($query);
+				echo $_POST["task"]." - ".$today;
+				$query = "INSERT INTO task(name, date, status) VALUES('".$_POST["task"]."', '".$today."', 0);";
+				$result = $conn->query($query);
 				$_SESSION['error'] = 0;
 				header("Location:index.php");	
 			}
