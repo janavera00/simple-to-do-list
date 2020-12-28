@@ -4,7 +4,6 @@
 	include_once "db.php";
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		$repeat = "";
 
 		if (isset($_GET['main'])) {
 			$query = "SELECT * FROM subtask WHERE name='".$_POST["task"]."' AND date='".$today."'";

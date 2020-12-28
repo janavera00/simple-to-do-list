@@ -16,6 +16,7 @@ input
     width: 80%;
     margin: auto;
     padding: 10px;
+    border-radius: 10px;
 }
 .tab
 {
@@ -26,12 +27,14 @@ input
 }
 .taskBox
 {
-	margin: 20px;
+	margin: 30px;
+	border: 2px solid black;
+	border-radius: 10px;
 }
 .task
 {
 	text-align: left;
-	width: 80%;
+	width: 75%;
 }
 .buttonContainer
 {
@@ -56,7 +59,7 @@ input
 }
 
 /*Border*/
-.container,.tab,.taskBox,.task,.button,#error
+.tab,.task,.button,#error
 {
 	border: 1px solid black;
 	border-radius: 10px;

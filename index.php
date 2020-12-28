@@ -1,7 +1,7 @@
 <?php
 	session_start();
 
-	if(!$_GET)
+	if(!isset($_GET['error']))
 	{
 		$_SESSION['error'] = 0;
 	}
@@ -53,7 +53,7 @@
 				$query = "SELECT * FROM task WHERE date='".$today."';";
 				$result = $conn->query($query);
 
-				// display all the task ang subtask
+				// display all the taskan g subtask
 				while ($rows = $result->fetch_assoc()) 
 				{
 					// display task box
@@ -61,22 +61,48 @@
 						$key = $rows['taskno'];
 					{ ?>
 						<div class='taskBox'>
-							<a onclick="myFunction(<?php echo $rows['taskno']; ?>)" style="color: white;">
-								<div class='task'>
-									<?php echo $rows['name'] ?>
-								</div>
-							</a>
-							<div class='buttonContainer'>
-								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
-								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" >Edit</a>
-								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
-							</div>
+								<?php
+									if(isset($_GET['id']) && $_GET['id'] == $rows['taskno'])
+									{
+										?>
+											<form method="post" action="edit.php?id=<?php echo $_GET['id']; ?>">
+												<input type="textbox" name="task" class="task" style="width: 91%; background-color: #1e5f74;" value="<?php echo $rows['name']; ?>" required>
+												<input type="submit" name="enter" value="Enter" class="button">
+											</form>
+										<?php
+									} else
+									{
+										?>
+											<a onclick="myFunction(<?php echo $rows['taskno']; ?>)" style="color: white;">
+												<div class="task">
+													<?php echo $rows['name']; ?>
+												</div>
+											</a>
+											<div class='buttonContainer'>
+												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
+												<a href="index.php?id=<?php echo $rows['taskno']; ?>" class="button" >Edit</a>
+												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
+											</div>
+										<?php	
+									}
+								?>
 
-							<div id="<?php echo $rows['taskno']; ?>" style="display: none;">
+							<!-- subtask container --click main task to show(change display to block) -->
+							<div id="<?php echo $rows['taskno']; ?>" style="display: <?php 
+								if(isset($_GET['id']) && $_GET['id'] == $rows['taskno'] || isset($_GET['main']) && $_GET['main'] == $rows['taskno'] && $_GET['sub'] == $subRows['subtaskno'] || $_SESSION['error'] == $rows['taskno'])
+								{
+									echo 'block';
+								}
+								else
+								{
+									echo 'none';
+								}
+
+							 ?>;">
 								<hr style="width: 95%;">
 								<div class="subTaskBox">
 									<form method="post" action="add.php?main=<?php echo $rows['taskno']; ?>">
-										<input type="textbox" name="task" class="task" style="width: 90%;" placeholder="Any Specifics?" required>
+										<input type="textbox" name="task" class="task" style="width: 87%;" placeholder="Any Specifics?" required>
 										<input type="submit" name="enter" value="Enter" class="button">
 
 										<div <?php echo $_SESSION['error'] == $rows['taskno']?"id":"class" ?>="error" >
@@ -90,18 +116,33 @@
 								$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."'");
 
 								while ($subRows = $subResult->fetch_assoc()) {
+									echo "<hr style='width: 95%;'>";
+									if(isset($_GET['main']) && $_GET['main'] == $rows['taskno'] && $_GET['sub'] == $subRows['subtaskno'])
+									{
+										?>
+											<form method="post" action="edit.php?main=<?php echo $rows['taskno'].'&sub='.$subRows['subtaskno']; ?>">
+												<input type="textbox" name="task" class="task" style="width: 87%;" value="<?php echo $subRows['name'] ?>" required>
+												<input type="submit" name="enter" value="Enter" class="button">
+											</form>
+										<?php
+									} else
+									{
+										?>
+											
+											<div class="subTaskBox">
+												<div class='task' style="width: 75%;">
+													<?php echo $subRows['name'] ?>
+												</div>
+												<div class='buttonContainer'>
+													<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
+													<a href="index.php?<?php echo 'main='.$rows['taskno'].'&sub='.$subRows['subtaskno']; ?>" class="button" >Edit</a>
+													<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
+												</div>
+											</div>
+										<?php	
+									}
 									?>
-										<hr style="width: 95%;">
-										<div class="subTaskBox">
-											<div class='task' style="width: 79%;">
-												<?php echo $subRows['name'] ?>
-											</div>
-											<div class='buttonContainer'>
-												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
-												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" >Edit</a>
-												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
-											</div>
-										</div>
+										
 									<?php
 								}
 							?>
