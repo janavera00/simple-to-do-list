@@ -1,9 +1,10 @@
 <?php
 	session_start();
 
-	if(!isset($_GET['error']))
+	if(!$_SESSION['error'])
 	{
 		$_SESSION['error'] = 0;
+		$_SESSION['errorMessege'] = "";
 	}
 
 	include_once 'db.php';
@@ -41,7 +42,7 @@
 					<input type="submit" name="enter" value="Enter" class="button">
 				</form>
 				<div <?php echo $_SESSION['error'] == -1?"id":"class" ?>="error" >
-					Task already in the list!!!
+					<?php echo $_SESSION['errorMessege']; ?>
 				</div>
 			</div>
 
@@ -105,14 +106,14 @@
 									<input type="submit" name="enter" value="Enter" class="button">
 
 									<div <?php echo $_SESSION['error'] == $rows['taskno']?"id":"class" ?>="error" >
-										Task already in the list!!!
+										<?php echo $_SESSION['errorMessege']; ?>
 									</div>
 								</form>
 							</div>
 						
 
 						<?php 
-							$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."'");
+							$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."' AND status=0");
 
 							while ($subRows = $subResult->fetch_assoc()) {
 								echo "<hr style='width: 95%;'>";
@@ -120,7 +121,7 @@
 								{
 									?>
 										<form method="post" action="edit.php?main=<?php echo $rows['taskno'].'&sub='.$subRows['subtaskno']; ?>">
-											<input type="textbox" name="task" class="task" style="width: 87%;" value="<?php echo $subRows['name'] ?>" required>
+											<input type="textbox" name="task" class="task" style="width: 87%; background-color: #1e5f74;" value="<?php echo $subRows['name'] ?>" required>
 											<input type="submit" name="enter" value="Enter" class="button">
 										</form>
 									<?php
@@ -133,7 +134,7 @@
 												<?php echo $subRows['name'] ?>
 											</div>
 											<div class='buttonContainer'>
-												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
+												<a href="complete.php?sub=<?php echo $subRows['subtaskno']; ?>" class="button" style="background-color: green;">Done</a>
 												<a href="index.php?<?php echo 'main='.$rows['taskno'].'&sub='.$subRows['subtaskno']; ?>" class="button" >Edit</a>
 												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
 											</div>
