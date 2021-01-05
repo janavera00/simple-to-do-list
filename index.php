@@ -81,7 +81,7 @@
 									<div class='buttonContainer'>
 										<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
 										<a href="index.php?id=<?php echo $rows['taskno']; ?>" class="button" >Edit</a>
-										<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
+										<a href="delete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
 									</div>
 								<?php	
 							}
@@ -136,7 +136,7 @@
 											<div class='buttonContainer'>
 												<a href="complete.php?sub=<?php echo $subRows['subtaskno']; ?>" class="button" style="background-color: green;">Done</a>
 												<a href="index.php?<?php echo 'main='.$rows['taskno'].'&sub='.$subRows['subtaskno']; ?>" class="button" >Edit</a>
-												<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
+												<a href="delete.php?<?php echo 'main='.$rows['taskno'].'&sub='.$subRows['subtaskno']; ?>" class="button" style="background-color: red;">Delete</a>
 											</div>
 										</div>
 									<?php	
