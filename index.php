@@ -1,8 +1,11 @@
 <?php
 	session_start();
 
-		$_SESSION['error'];
-		$_SESSION['errorMessege'];
+	if(!isset($_SESSION['error']))
+	{
+		$_SESSION['error'] = 0;
+		$_SESSION['errorMessege'] = "";
+	}		
 
 	include_once 'db.php';
 ?>
