@@ -59,7 +59,7 @@
 							} else
 							{
 								?>
-									<a onclick="myFunction(<?php echo $rows['taskno']; ?>)" style="color: white;">
+									<a onclick="openDiv(<?php echo $rows['taskno']; ?>)" style="color: white;">
 										<div class="task">
 											<?php echo $rows['name']; ?>
 										</div>
@@ -143,144 +143,152 @@
 		<!-- container for overdue tasks -->
 		<div class="container">
 			<div class="tabContainer">
-				<div class="tab" style="background-color: red;"> 
-					Overdue
-				</div>	
+				<a onclick="openDiv('overdue')">
+					<div class="tab" style="background-color: red;"> 
+						Overdue
+					</div>	
+				</a>
 			</div>
 
-			<?php
-				// query to fetch task created today
-				$query = "SELECT * FROM task WHERE NOT date='".$today."' AND status=0 ORDER BY date;";
-				$result = $conn->query($query);
-
-				$date = "";
-				// display all the taskan g subtask
-				while ($rows = $result->fetch_assoc()) 
-				{
-					if($date != $rows['date'])
-					{
-						$date = $rows['date'];
-						echo "<h1 style='text-align: left; margin-left: 10px;'>".$date."</h1>";
-					}
-				?>
-					<div class='taskBox'>
-
-						<a onclick="myFunction(<?php echo $rows['taskno']; ?>)" style="color: white;">
-							<div class="task">
-								<?php echo $rows['name']; ?>
-							</div>
-						</a>
-						<div class='buttonContainer'>
-							<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
-							<a href="delete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
-						</div>
-
-						<!-- subtask container --click main task to show(change display to block) -->
-						<div id="<?php echo $rows['taskno']; ?>" style="display: <?php 
-							if(isset($_GET['id']) && $_GET['id'] == $rows['taskno'] || isset($_GET['main']) && $_GET['main'] == $rows['taskno'] && $_GET['sub'] == $subRows['subtaskno'] || $_SESSION['error'] == $rows['taskno'])
-							{
-								echo 'block';
-							}
-							else
-							{
-								echo 'none';
-							}
-						 ?>;">
-
-						<?php 
-							$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."' AND status=0");
-
-							while ($subRows = $subResult->fetch_assoc()) {
-								echo "<hr style='width: 95%;'>";
-							?>
-								<div class="subTaskBox">
-									<div class='task' style="width: 75%;">
-										<?php echo $subRows['name'] ?>
-									</div>
-									<div class='buttonContainer'>
-										<a href="complete.php?sub=<?php echo $subRows['subtaskno']; ?>" class="button" style="background-color: green;">Done</a>
-										<a href="delete.php?<?php echo 'main='.$rows['taskno'].'&sub='.$subRows['subtaskno']; ?>" class="button" style="background-color: red;">Delete</a>
-									</div>
-								</div>
-							<?php	
-							}
-							?>
-						</div>
-					</div>
-									
+			<div id="overdue" style="display: none;">
 				<?php
-				}
-				?>
+					// query to fetch task created today
+					$query = "SELECT * FROM task WHERE NOT date='".$today."' AND status=0 ORDER BY date;";
+					$result = $conn->query($query);
+
+					$date = "";
+					// display all the taskan g subtask
+					while ($rows = $result->fetch_assoc()) 
+					{
+						if($date != $rows['date'])
+						{
+							$date = $rows['date'];
+							echo "<h1 style='text-align: left; margin-left: 10px;'>".$date."</h1>";
+						}
+					?>
+						<div class='taskBox'>
+
+							<a onclick="openDiv(<?php echo $rows['taskno']; ?>)" style="color: white;">
+								<div class="task">
+									<?php echo $rows['name']; ?>
+								</div>
+							</a>
+							<div class='buttonContainer'>
+								<a href="complete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: green;">Done</a>
+								<a href="delete.php?id=<?php echo $rows['taskno']; ?>" class="button" style="background-color: red;">Delete</a>
+							</div>
+
+							<!-- subtask container --click main task to show(change display to block) -->
+							<div id="<?php echo $rows['taskno']; ?>" style="display: <?php 
+								if(isset($_GET['id']) && $_GET['id'] == $rows['taskno'] || isset($_GET['main']) && $_GET['main'] == $rows['taskno'] && $_GET['sub'] == $subRows['subtaskno'] || $_SESSION['error'] == $rows['taskno'])
+								{
+									echo 'block';
+								}
+								else
+								{
+									echo 'none';
+								}
+							 ?>;">
+
+							<?php 
+								$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."' AND status=0");
+
+								while ($subRows = $subResult->fetch_assoc()) {
+									echo "<hr style='width: 95%;'>";
+								?>
+									<div class="subTaskBox">
+										<div class='task' style="width: 75%;">
+											<?php echo $subRows['name'] ?>
+										</div>
+										<div class='buttonContainer'>
+											<a href="complete.php?sub=<?php echo $subRows['subtaskno']; ?>" class="button" style="background-color: green;">Done</a>
+											<a href="delete.php?<?php echo 'main='.$rows['taskno'].'&sub='.$subRows['subtaskno']; ?>" class="button" style="background-color: red;">Delete</a>
+										</div>
+									</div>
+								<?php	
+								}
+								?>
+							</div>
+						</div>
+										
+					<?php
+					}
+					?>
+			</div>
 		</div>
 
 		<!-- container for completed Tasks -->
 		<div class="container">
 			<div class="tabContainer">
-				<div class="tab" style="background-color: green;"> 
-					Completed
-				</div>	
+				<a onclick="openDiv('complete')">
+					<div class="tab" style="background-color: green;"> 
+						Completed
+					</div>	
+				</a>
 			</div>
 
-			<?php
-				// query to fetch task created today
-				$query = "SELECT * FROM task WHERE status=1 ORDER BY date;";
-				$result = $conn->query($query);
+			<div id="complete" style="display: none;">
+				<?php
+					// query to fetch task created today
+					$query = "SELECT * FROM task WHERE status=1 ORDER BY date;";
+					$result = $conn->query($query);
 
-				$date = "";
-				// display all the taskan g subtask
-				while ($rows = $result->fetch_assoc()) 
-				{
-					if($date != $rows['date'])
+					$date = "";
+					// display all the taskan g subtask
+					while ($rows = $result->fetch_assoc()) 
 					{
-						$date = $rows['date'];
-						echo "<h1 style='text-align: left; margin-left: 10px;'>".$date."</h1>";
-					}
-				?>
-					<div class='taskBox'>
-
-						<a onclick="myFunction(<?php echo $rows['taskno']; ?>)" style="color: white;">
-							<div class="task" style="width: 95%;">
-								<?php echo $rows['name']; ?>
-							</div>
-						</a>
-
-						<!-- subtask container --click main task to show(change display to block) -->
-						<div id="<?php echo $rows['taskno']; ?>" style="display: <?php 
-							if(isset($_GET['id']) && $_GET['id'] == $rows['taskno'] || isset($_GET['main']) && $_GET['main'] == $rows['taskno'] && $_GET['sub'] == $subRows['subtaskno'] || $_SESSION['error'] == $rows['taskno'])
-							{
-								echo 'block';
-							}
-							else
-							{
-								echo 'none';
-							}
-						 ?>;">
-
-						<?php 
-							$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."'");
-
-							while ($subRows = $subResult->fetch_assoc()) {
-								echo "<hr style='width: 95%;'>";
-							?>
-								<div class="subTaskBox">
-									<div class='task' style="width: 95%;">
-										<?php echo $subRows['name'] ?>
-									</div>
-								</div>
-							<?php
-							}
-							?>
-						</div>
-						<!--  -->
-					</div>
-					<?php
+						if($date != $rows['date'])
+						{
+							$date = $rows['date'];
+							echo "<h1 style='text-align: left; margin-left: 10px;'>".$date."</h1>";
 						}
 					?>
+						<div class='taskBox'>
+
+							<a onclick="openDiv(<?php echo $rows['taskno']; ?>)" style="color: white;">
+								<div class="task" style="width: 95%;">
+									<?php echo $rows['name']; ?>
+								</div>
+							</a>
+
+							<!-- subtask container --click main task to show(change display to block) -->
+							<div id="<?php echo $rows['taskno']; ?>" style="display: <?php 
+								if(isset($_GET['id']) && $_GET['id'] == $rows['taskno'] || isset($_GET['main']) && $_GET['main'] == $rows['taskno'] && $_GET['sub'] == $subRows['subtaskno'] || $_SESSION['error'] == $rows['taskno'])
+								{
+									echo 'block';
+								}
+								else
+								{
+									echo 'none';
+								}
+							 ?>;">
+
+							<?php 
+								$subResult = $conn->query("SELECT * FROM subtask WHERE mainTask = '".$rows['taskno']."'");
+
+								while ($subRows = $subResult->fetch_assoc()) {
+									echo "<hr style='width: 95%;'>";
+								?>
+									<div class="subTaskBox">
+										<div class='task' style="width: 95%;">
+											<?php echo $subRows['name'] ?>
+										</div>
+									</div>
+								<?php
+								}
+								?>
+							</div>
+							<!--  -->
+						</div>
+						<?php
+							}
+						?>
+			</div>
 		</div>
 
 
 		<script>
-			function myFunction(elemId)
+			function openDiv(elemId)
 			{
 				var disp = document.getElementById(elemId).style.display; 
 				// alert(disp);
@@ -292,9 +300,6 @@
 				{
 					document.getElementById(elemId).style.display = "none";
 				}
-			}
-			function openSubtask()
-			{
 
 			}
 		</script>
